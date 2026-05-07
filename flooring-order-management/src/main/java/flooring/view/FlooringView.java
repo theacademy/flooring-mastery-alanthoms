@@ -3,6 +3,7 @@ package flooring.view;
 import flooring.dto.Order;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class FlooringView {
     private UserIO io = new UserIOConsoleImpl();
@@ -53,5 +54,47 @@ public class FlooringView {
         io.readString(
                 "Order successfully added.  Please hit enter to continue");
     }
+
+
+
+    public void displayOrderList(List<Order> orders) {
+        for (Order order : orders) {
+            io.print(order.toString());
+        }
+    }
+
+    public void displayDisplayAllBanner() {
+        io.print("=== DISPLAY ALL ORDERS ===");
+    }
+
+    public void displayRemoveBanner() {
+        io.print("=== REMOVE AN ORDER ===");
+    }
+
+
+    public void displayRemoveSuccessBanner() {
+        io.readString(
+                "Order successfully REMOVED.  Please hit enter to continue");
+    }
+
+
+
+    public int getOrderNo() {
+        return io.readInt("Please enter the order no..");
+    }
+
+    public void displayExitBanner() {
+        io.print("Good Bye!!!");
+    }
+
+    public void displayUnknownCommandBanner() {
+        io.print("Unknown Command!!!");
+    }
+
+    public void displayErrorMessage(String errorMsg) {
+        io.print("=== ERROR ===");
+        io.print(errorMsg);
+    }
+
 
 }

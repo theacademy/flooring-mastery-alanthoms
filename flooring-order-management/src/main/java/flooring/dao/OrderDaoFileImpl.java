@@ -2,6 +2,7 @@ package flooring.dao;
 
 import flooring.dto.Order;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class OrderDaoFileImpl implements OrderDao {
 
     @Override
     public List<Order> getAllOrders() {
-        return null;
+        return  new ArrayList<>(orders.values());
     }
 
     public Order getOrder(int orderNo) {
