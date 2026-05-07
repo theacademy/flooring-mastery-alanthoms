@@ -16,8 +16,10 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     ProductDao productDao;
     TaxDao taxDao;
 
-    public FlooringServiceLayerImpl(OrderDao orderDao) {
+    public FlooringServiceLayerImpl(OrderDao orderDao, ProductDao productDao, TaxDao taxDao) {
         this.orderDao = orderDao;
+        this.productDao = productDao;
+        this.taxDao = taxDao;
     }
 
 
@@ -54,7 +56,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
 
     @Override
-    public void addOrder(Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoDataValidationException{
+    public void addOrder(Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
         if(orderDao.getOrder(order.getOrderNumber()) != null){
             throw new OrderDaoDuplicateIdException("Order number" + order.getOrderNumber() + " already exists.");
         }

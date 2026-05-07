@@ -1,6 +1,5 @@
 import flooring.controller.FlooringController;
-import flooring.dao.OrderDao;
-import flooring.dao.OrderDaoFileImpl;
+import flooring.dao.*;
 import flooring.service.FlooringServiceLayer;
 import flooring.service.FlooringServiceLayerImpl;
 import flooring.view.FlooringView;
@@ -12,7 +11,10 @@ public class App {
         UserIO io = new UserIOConsoleImpl();
         FlooringView myView = new FlooringView(io);
         OrderDao orderDao = new OrderDaoFileImpl();
-        FlooringServiceLayer myService = new FlooringServiceLayerImpl(orderDao);
+        TaxDao taxDao = new TaxDaoFileImpl();
+        ProductDao productDao = new ProductDaoFileImpl();
+
+        FlooringServiceLayer myService = new FlooringServiceLayerImpl(orderDao,  productDao, taxDao);
 
         FlooringController controller = new FlooringController(myService, myView);
         controller.run();

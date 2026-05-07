@@ -6,7 +6,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class FlooringView {
-    private UserIO io = new UserIOConsoleImpl();
+
+    private UserIO io;
+
+    public FlooringView(UserIO io) {
+        this.io = io;
+    }
 
     public int printMenuAndGetSelection(){
 
