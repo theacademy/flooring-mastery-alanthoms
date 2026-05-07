@@ -1,13 +1,23 @@
 package flooring.controller;
 
 
+import flooring.dao.OrderDao;
+import flooring.dao.OrderDaoFileImpl;
+import flooring.dto.Order;
 import flooring.view.FlooringView;
 import flooring.view.UserIO;
 import flooring.view.UserIOConsoleImpl;
 
 public class FlooringController {
+
+
     private FlooringView view = new FlooringView();
     private UserIO io = new UserIOConsoleImpl();
+    private OrderDao orderDao = new OrderDaoFileImpl();
+
+
+
+
     int menuSelection = 0;
     public void run() {
         boolean keepGoing = true;
@@ -17,16 +27,16 @@ public class FlooringController {
 
             switch (menuSelection) {
                 case 1:
-                    io.print("DISPALU ORDER");
+                    io.print("DISPLAY ORDER");
                     break;
                 case 2:
-                    io.print("ADD ORDER");
+                    addOrder();
                     break;
                 case 3:
                     io.print("EDIT ORDER");
                     break;
                 case 4:
-                    io.print("REMOVE ORDERT");
+                    io.print("REMOVE ORDER");
                     break;
                 case 5:
                     io.print("EXPORT ALL DATA");
@@ -44,5 +54,12 @@ public class FlooringController {
 
     private int getMenuSelection() {
         return view.printMenuAndGetSelection();
+    }
+
+    private void addOrder(){
+        view.displayAddOrderBanner();
+        Order newOrder = view.getNewOrderInfo();
+        orderDao.addOrder(newOrder.getOrderNumber(), newOrder);
+        view.displayAddOrderSuccessBanner();
     }
 }

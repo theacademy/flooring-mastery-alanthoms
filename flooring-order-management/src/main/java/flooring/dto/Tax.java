@@ -8,8 +8,8 @@ public class Tax {
     private String stateName;
     private BigDecimal taxRate;
 
-    public Tax(String stateAbbreviation) {
-        this.stateAbbreviation = stateAbbreviation;
+    public Tax(String stateName) {
+        this.stateAbbreviation = stateName;
     }
 
     public String getStateAbbreviation() {
