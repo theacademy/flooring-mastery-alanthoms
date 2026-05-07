@@ -23,17 +23,17 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public List<Order> getAllOrders() throws OrderDaoPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return orderDao.getAllOrders();
     }
 
     @Override
     public Order getOrder(int orderNo) throws OrderDaoPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return orderDao.getOrder(orderNo);
     }
 
     @Override
     public Order removeOrder(int orderNo) throws OrderDaoPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return orderDao.removeOrder(orderNo);
     }
 
     private void validateOrderData(Order order) throws OrderDaoDataValidationException{
