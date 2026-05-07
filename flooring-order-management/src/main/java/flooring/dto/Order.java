@@ -123,4 +123,15 @@ public class Order {
     public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
+
+    @Override
+    public String toString() {
+        return "Order Number: " + orderNumber
+                + " | Customer: " + customerName
+                + " | State: " + state
+                + " | Product: " + productType
+                + " | Area: " + area
+                + " | Total: " + total;
+    }
+
 }
