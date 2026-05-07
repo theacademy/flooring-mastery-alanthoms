@@ -18,8 +18,12 @@ public class OrderDaoFileImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllOrders(String date) {
-        return List.of();
+    public List<Order> getAllOrders() {
+        return null;
+    }
+
+    public Order getOrder(int orderNo) {
+        return orders.get(orderNo);
     }
 
     @Override

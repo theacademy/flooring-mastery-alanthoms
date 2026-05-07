@@ -10,4 +10,5 @@ public interface TaxDao {
 
     Tax addTax(String stateAbbreviation, Tax tax);
     List<Tax> getAllTaxes();
+    Tax getTax(String stateAbbreviation);
 }

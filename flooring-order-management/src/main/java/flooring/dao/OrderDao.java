@@ -7,7 +7,8 @@ import java.util.List;
 public interface OrderDao {
 
     Order addOrder(int orderNo, Order order);
-    List<Order> getAllOrders(String date);
+    List<Order> getAllOrders();
+    Order getOrder(int orderNo);
     Order removeOrder(int orderNo);
 
 }

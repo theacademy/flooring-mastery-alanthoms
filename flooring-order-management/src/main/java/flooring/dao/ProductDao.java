@@ -9,4 +9,6 @@ public interface ProductDao {
 
     Product addProduct(String productType, Order order);
     List<Product> getAllProducts();
+    Product getProduct(String productType);
+
 }
