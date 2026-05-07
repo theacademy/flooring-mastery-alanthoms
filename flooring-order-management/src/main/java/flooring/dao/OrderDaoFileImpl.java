@@ -158,12 +158,6 @@ public class OrderDaoFileImpl implements OrderDao {
         }
 
         // write header row first
-        out.println(
-                "OrderNumber,CustomerName,State,TaxRate," +
-                        "ProductType,Area,CostPerSquareFoot," +
-                        "LaborCostPerSquareFoot,MaterialCost," +
-                        "LaborCost,Tax,Total"
-        );
 
         String orderAsText;
 

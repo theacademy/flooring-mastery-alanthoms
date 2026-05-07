@@ -4,11 +4,12 @@ import flooring.dto.Order;
 import flooring.dto.Product;
 import flooring.dto.Tax;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface TaxDao {
 
-    Tax addTax(String stateAbbreviation, Tax tax);
     List<Tax> getAllTaxes();
     Tax getTax(String stateAbbreviation);
 }
