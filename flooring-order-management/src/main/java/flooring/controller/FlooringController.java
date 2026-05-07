@@ -1,27 +1,19 @@
 package flooring.controller;
 
 
+import flooring.view.FlooringView;
 import flooring.view.UserIO;
 import flooring.view.UserIOConsoleImpl;
 
 public class FlooringController {
-
+    private FlooringView view = new FlooringView();
     private UserIO io = new UserIOConsoleImpl();
-
+    int menuSelection = 0;
     public void run() {
         boolean keepGoing = true;
-        int menuSelection = 0;
         while (keepGoing) {
-            io.print("Main Menu");
-            io.print("1. Display Orders");
-            io.print("2. Add an Order");
-            io.print("3. Edit an Order ");
-            io.print("4. Remove an Order");
-            io.print("5. Export all Data ");
-            io.print("6. Exit");
 
-            menuSelection = io.readInt("Please select from the"
-                    + " above choices.", 1, 6);
+            menuSelection = getMenuSelection();
 
             switch (menuSelection) {
                 case 1:
@@ -48,5 +40,9 @@ public class FlooringController {
 
         }
         io.print("GOOD BYE");
+    }
+
+    private int getMenuSelection() {
+        return view.printMenuAndGetSelection();
     }
 }
