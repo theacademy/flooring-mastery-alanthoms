@@ -10,8 +10,8 @@ public interface FlooringServiceLayer {
             OrderDaoDataValidationException,
             OrderDaoPersistenceException;
 
-    List<Order> getAllOrders() throws
-            OrderDaoPersistenceException;
+    List<Order> getAllOrders(String date) throws
+            OrderDaoPersistenceException, OrderDaoDataValidationException;
 
     Order getOrder(int orderNo) throws
             OrderDaoPersistenceException;

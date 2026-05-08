@@ -33,9 +33,8 @@ public class FlooringController {
     int menuSelection = 0;
     public void run() {
         boolean keepGoing = true;
-        try {
-            while (keepGoing) {
-
+        while (keepGoing) {
+            try {
                 menuSelection = getMenuSelection();
 
                 switch (menuSelection) {
@@ -61,12 +60,12 @@ public class FlooringController {
                         io.print("UNKNOWN COMMAND");
                 }
 
+            } catch (OrderDaoPersistenceException | OrderDaoDataValidationException e) {
+                view.displayErrorMessage(e.getMessage());
             }
-            io.print("GOOD BYE");
-        } catch (OrderDaoPersistenceException e) {
 
-            view.displayErrorMessage(e.getMessage());
         }
+        io.print("GOOD BYE");
     }
 
     private int getMenuSelection() {
@@ -88,12 +87,12 @@ public class FlooringController {
             }
         } while (hasErrors);
 
-
     }
 
-    private void listOrders() throws OrderDaoPersistenceException {
+    private void listOrders() throws OrderDaoPersistenceException, OrderDaoDataValidationException {
         view.displayDisplayAllBanner();
-        List<Order> orderList = service.getAllOrders();
+        String date = view.printOptionAndGetDate();
+        List<Order> orderList = service.getAllOrders(date);
         view.displayOrderList(orderList);
     }
 

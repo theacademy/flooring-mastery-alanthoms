@@ -8,6 +8,9 @@ import flooring.dto.Product;
 import flooring.dto.Tax;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class FlooringServiceLayerImpl implements FlooringServiceLayer {
@@ -24,7 +27,8 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
 
     @Override
-    public List<Order> getAllOrders() throws OrderDaoPersistenceException {
+    public List<Order> getAllOrders(String date) throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+        validateDate(date);
         return orderDao.getAllOrders();
     }
 
@@ -51,6 +55,18 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
             throw new OrderDaoDataValidationException(
                     "ERROR: Customer Name, State, Product Type, and Area are required and must be valid.");
+        }
+    }
+
+    private void validateDate(String date) throws OrderDaoDataValidationException{
+        try {
+            LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (DateTimeParseException e) {
+            throw new OrderDaoDataValidationException(
+                    "ERROR: Date format is invalid.");
+        }
+        if (date.trim().isEmpty()){
+            throw new OrderDaoDataValidationException("ERROR: Date format is invalid.");
         }
     }
 

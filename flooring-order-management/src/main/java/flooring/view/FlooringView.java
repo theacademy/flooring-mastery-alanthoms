@@ -3,6 +3,8 @@ package flooring.view;
 import flooring.dto.Order;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class FlooringView {
@@ -84,6 +86,8 @@ public class FlooringView {
 
 
 
+
+
     public int getOrderNo() {
         return io.readInt("Please enter the order no..");
     }
@@ -99,7 +103,14 @@ public class FlooringView {
     public void displayErrorMessage(String errorMsg) {
         io.print("=== ERROR ===");
         io.print(errorMsg);
+        io.readString("Press enter to continue");
     }
+
+    public String printOptionAndGetDate() {
+        return io.readString("Please enter the date you would like in dd/MM/yyyy format");
+    }
+
+
 
 
 }
