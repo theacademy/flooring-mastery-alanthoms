@@ -83,6 +83,10 @@ public class FlooringView {
         io.readString(
                 "Order successfully REMOVED.  Please hit enter to continue");
     }
+    public void displaygetAllSuccessBanner() {
+        io.readString(
+                "All Orders for date printed.  Please hit enter to continue");
+    }
 
 
 
@@ -107,7 +111,7 @@ public class FlooringView {
     }
 
     public String printOptionAndGetDate() {
-        return io.readString("Please enter the date you would like in dd/MM/yyyy format");
+        return io.readString("Please enter the date you would like in MM/dd/yyyy format");
     }
 
 

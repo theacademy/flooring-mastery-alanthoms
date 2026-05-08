@@ -29,7 +29,8 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     @Override
     public List<Order> getAllOrders(String date) throws OrderDaoPersistenceException, OrderDaoDataValidationException {
         validateDate(date);
-        return orderDao.getAllOrders();
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        return orderDao.getAllOrders(stringDate);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     private void validateDate(String date) throws OrderDaoDataValidationException{
         try {
-            LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         } catch (DateTimeParseException e) {
             throw new OrderDaoDataValidationException(
                     "ERROR: Date format is invalid.");
@@ -119,6 +120,10 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
 
         orderDao.addOrder(order.getOrderNumber(), order);
+    }
+
+    private String getFileName(LocalDate date){
+        return "Orders/Orders_" + date.format(DateTimeFormatter.ofPattern("MMddyyyy")) +".txt";
     }
 
 

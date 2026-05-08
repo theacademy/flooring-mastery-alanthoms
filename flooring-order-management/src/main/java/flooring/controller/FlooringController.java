@@ -94,6 +94,7 @@ public class FlooringController {
         String date = view.printOptionAndGetDate();
         List<Order> orderList = service.getAllOrders(date);
         view.displayOrderList(orderList);
+        view.displaygetAllSuccessBanner();
     }
 
     /**

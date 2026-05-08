@@ -131,7 +131,9 @@ public class Order {
                 + " | State: " + state
                 + " | Product: " + productType
                 + " | Area: " + area
-                + " | Total: " + total;
+                + " | Total: " + total
+        +"Date " + orderDate;
+
     }
 
 }

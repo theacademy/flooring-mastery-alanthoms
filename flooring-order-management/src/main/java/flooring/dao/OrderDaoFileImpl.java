@@ -5,18 +5,31 @@ import flooring.service.OrderDaoPersistenceException;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class OrderDaoFileImpl implements OrderDao {
 
 
-    private final String ORDERS_FILE;
+    public String getORDERS_FILE() {
+        return ORDERS_FILE;
+    }
+
+    public void setORDERS_FILE(String ORDERS_FILE) {
+        this.ORDERS_FILE = ORDERS_FILE;
+    }
+
+    private String ORDERS_FILE;
+
+
     public static final String DELIMITER = ",";
 
-    public OrderDaoFileImpl(){
-        ORDERS_FILE = "orders.txt";
-    }
+
+
     private Map<Integer, Order> orders = new HashMap<>();
+
+
 
     @Override
     public Order addOrder(int orderNo, Order order) throws OrderDaoPersistenceException {
@@ -27,7 +40,8 @@ public class OrderDaoFileImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getAllOrders() throws OrderDaoPersistenceException  {
+    public List<Order> getAllOrders(String date) throws OrderDaoPersistenceException  {
+        setORDERS_FILE(date);
         loadOrders();
         return  new ArrayList<>(orders.values());
     }
@@ -161,7 +175,7 @@ public class OrderDaoFileImpl implements OrderDao {
 
         String orderAsText;
 
-        List<Order> orderList = this.getAllOrders();
+        List<Order> orderList = this.getAllOrders(getORDERS_FILE());
 
         for (Order currentOrder : orderList) {
 
