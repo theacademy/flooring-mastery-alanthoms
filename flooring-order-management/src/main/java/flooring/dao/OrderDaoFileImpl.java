@@ -12,15 +12,7 @@ import java.util.*;
 public class OrderDaoFileImpl implements OrderDao {
 
 
-    public String getORDERS_FILE() {
-        return ORDERS_FILE;
-    }
 
-    public void setORDERS_FILE(String ORDERS_FILE) {
-        this.ORDERS_FILE = ORDERS_FILE;
-    }
-
-    private String ORDERS_FILE;
 
 
     public static final String DELIMITER = ",";
@@ -32,30 +24,29 @@ public class OrderDaoFileImpl implements OrderDao {
 
 
     @Override
-    public Order addOrder(int orderNo, Order order) throws OrderDaoPersistenceException {
-        loadOrders();
+    public Order addOrder(String stringDateFileName, int orderNo, Order order) throws OrderDaoPersistenceException {
+        loadOrders(stringDateFileName);
         Order prevOrder = orders.put(orderNo, order);
-        writeOrders();
+        writeOrders(stringDateFileName);
         return prevOrder;
     }
 
     @Override
-    public List<Order> getAllOrders(String date) throws OrderDaoPersistenceException  {
-        setORDERS_FILE(date);
-        loadOrders();
+    public List<Order> getAllOrders(String stringDateFileName) throws OrderDaoPersistenceException  {
+        loadOrders(stringDateFileName);
         return  new ArrayList<>(orders.values());
     }
 
-    public Order getOrder(int orderNo) throws OrderDaoPersistenceException {
-        loadOrders();
+    public Order getOrder(String stringDateFileName, int orderNo) throws OrderDaoPersistenceException {
+        loadOrders(stringDateFileName);
         return orders.get(orderNo);
     }
 
     @Override
-    public Order removeOrder(int orderNo) throws OrderDaoPersistenceException{
-        loadOrders();
+    public Order removeOrder(String stringDateFileName, int orderNo) throws OrderDaoPersistenceException{
+        loadOrders(stringDateFileName);
         Order removedOrder = orders.remove(orderNo);
-        writeOrders();
+        writeOrders(stringDateFileName);
         return removedOrder;
     }
 
@@ -98,17 +89,17 @@ public class OrderDaoFileImpl implements OrderDao {
         return orderFromFile;
     }
 
-    private void loadOrders() throws OrderDaoPersistenceException {
+    private void loadOrders(String stringDateFileName) throws OrderDaoPersistenceException {
+
         Scanner scanner;
 
         try {
             // Create Scanner for reading the file
             scanner = new Scanner(
                     new BufferedReader(
-                            new FileReader(ORDERS_FILE)));
+                            new FileReader(stringDateFileName)));
         } catch (FileNotFoundException e) {
-            throw new OrderDaoPersistenceException(
-                    "-_- Could not load roster data into memory.", e);
+            return;
         }
         // currentLine holds the most recent line read from the file
         String currentLine;
@@ -160,12 +151,12 @@ public class OrderDaoFileImpl implements OrderDao {
         return orderAsText;
     }
 
-    private void writeOrders() throws OrderDaoPersistenceException {
+    private void writeOrders(String stringDateFileName) throws OrderDaoPersistenceException {
 
         PrintWriter out;
 
         try {
-            out = new PrintWriter(new FileWriter(ORDERS_FILE));
+            out = new PrintWriter(new FileWriter(stringDateFileName));
         } catch (IOException e) {
             throw new OrderDaoPersistenceException(
                     "Could not save order data.", e);
@@ -175,7 +166,7 @@ public class OrderDaoFileImpl implements OrderDao {
 
         String orderAsText;
 
-        List<Order> orderList = this.getAllOrders(getORDERS_FILE());
+        List<Order> orderList = this.getAllOrders(stringDateFileName);
 
         for (Order currentOrder : orderList) {
 

@@ -6,16 +6,16 @@ import java.util.List;
 
 public interface FlooringServiceLayer {
 
-    void addOrder(Order order) throws OrderDaoDuplicateIdException,
+    void addOrder(String date, Order order) throws OrderDaoDuplicateIdException,
             OrderDaoDataValidationException,
             OrderDaoPersistenceException;
 
     List<Order> getAllOrders(String date) throws
             OrderDaoPersistenceException, OrderDaoDataValidationException;
 
-    Order getOrder(int orderNo) throws
+    Order getOrder(String date, int orderNo) throws
             OrderDaoPersistenceException;
 
-    Order removeOrder(int orderNo) throws
-            OrderDaoPersistenceException;
+    Order removeOrder(String date, int orderNo) throws
+            OrderDaoPersistenceException, OrderDaoDataValidationException;
 }

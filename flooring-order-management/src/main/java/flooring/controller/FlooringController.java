@@ -74,11 +74,12 @@ public class FlooringController {
 
     private void addOrder() throws OrderDaoPersistenceException{
         view.displayAddOrderBanner();
+        String date = view.printOptionAndGetDate();
         boolean hasErrors = false;
         do {
             Order currentOrder = view.getNewOrderInfo();
             try {
-                service.addOrder(currentOrder);
+                service.addOrder(date, currentOrder);
                 view.displayAddOrderBanner();
                 hasErrors = false;
             } catch (OrderDaoDataValidationException | OrderDaoDuplicateIdException e){
@@ -105,10 +106,11 @@ public class FlooringController {
         view.displayStudent(student);
     }*/
 
-    private void removeOrder() throws OrderDaoPersistenceException {
+    private void removeOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException {
         view.displayRemoveBanner();
+        String date = view.printOptionAndGetDate();
         int orderNo = view.getOrderNo();
-        service.removeOrder(orderNo);
+        service.removeOrder(date, orderNo);
         view.displayRemoveSuccessBanner();
     }
     private void unknownCommand() {

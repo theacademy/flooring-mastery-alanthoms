@@ -34,13 +34,15 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     }
 
     @Override
-    public Order getOrder(int orderNo) throws OrderDaoPersistenceException {
-        return orderDao.getOrder(orderNo);
+    public Order getOrder(String date, int orderNo) throws OrderDaoPersistenceException {
+        return orderDao.getOrder(date, orderNo);
     }
 
     @Override
-    public Order removeOrder(int orderNo) throws OrderDaoPersistenceException {
-        return orderDao.removeOrder(orderNo);
+    public Order removeOrder(String date, int orderNo) throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+        validateDate(date);
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        return orderDao.removeOrder(stringDate, orderNo);
     }
 
     private void validateOrderData(Order order) throws OrderDaoDataValidationException{
@@ -73,8 +75,11 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
 
     @Override
-    public void addOrder(Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
-        if(orderDao.getOrder(order.getOrderNumber()) != null){
+    public void addOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
+        validateDate(date);
+
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        if(orderDao.getOrder(stringDate, order.getOrderNumber()) != null){
             throw new OrderDaoDuplicateIdException("Order number" + order.getOrderNumber() + " already exists.");
         }
         validateOrderData(order);
@@ -119,7 +124,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         order.setTotal(total);
 
 
-        orderDao.addOrder(order.getOrderNumber(), order);
+        orderDao.addOrder(stringDate, order.getOrderNumber(), order);
     }
 
     private String getFileName(LocalDate date){
