@@ -90,6 +90,7 @@ public class OrderDaoFileImpl implements OrderDao {
     }
 
     private void loadOrders(String stringDateFileName) throws OrderDaoPersistenceException {
+        //clear previous order as changes are written to file
 
         Scanner scanner;
 
