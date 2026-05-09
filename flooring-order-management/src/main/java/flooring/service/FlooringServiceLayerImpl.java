@@ -87,6 +87,14 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         }
     }
 
+    private void validateFutureDate(String date) throws OrderDaoDataValidationException{
+        validateDate(date);
+        LocalDate orderDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        if (orderDate.isBefore(LocalDate.now())) {
+            throw new OrderDaoDataValidationException("ERROR: Order date must be in the future.");
+        }
+    }
+
 
     @Override
     public Order prepareOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
@@ -146,7 +154,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     public void addOrder(String date, Order order)
             throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
 
-        validateDate(date);
+        validateFutureDate(date);
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 
