@@ -18,4 +18,8 @@ public interface FlooringServiceLayer {
 
     Order removeOrder(String date, int orderNo) throws
             OrderDaoPersistenceException, OrderDaoDataValidationException;
+
+
+    Order editOrder(String date, int orderNo) throws
+            OrderDaoPersistenceException, OrderDaoDataValidationException;
 }

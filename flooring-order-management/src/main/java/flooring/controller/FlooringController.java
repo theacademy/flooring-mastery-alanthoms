@@ -12,6 +12,7 @@ import flooring.view.FlooringView;
 import flooring.view.UserIO;
 import flooring.view.UserIOConsoleImpl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class FlooringController {
@@ -45,7 +46,7 @@ public class FlooringController {
                         addOrder();
                         break;
                     case 3:
-                        io.print("EDIT ORDER");
+                        editOrder();
                         break;
                     case 4:
                         removeOrder();
@@ -60,12 +61,12 @@ public class FlooringController {
                         io.print("UNKNOWN COMMAND");
                 }
 
-            } catch (OrderDaoPersistenceException | OrderDaoDataValidationException e) {
+            } catch (OrderDaoPersistenceException | OrderDaoDataValidationException | OrderDaoDuplicateIdException e) {
                 view.displayErrorMessage(e.getMessage());
             }
 
         }
-        io.print("GOOD BYE");
+        view.displayExitBanner();
     }
 
     private int getMenuSelection() {
@@ -96,6 +97,47 @@ public class FlooringController {
         List<Order> orderList = service.getAllOrders(date);
         view.displayOrderList(orderList);
         view.displaygetAllSuccessBanner();
+    }
+
+    private void editOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException, OrderDaoDuplicateIdException {
+        view.displayEditOrderBanner();
+        String date = view.printOptionAndGetDate();
+        int orderNo = view.getOrderNo();
+        Order editOrder = null;
+        try {
+            editOrder = service.getOrder(date, orderNo);
+        } catch (OrderDaoPersistenceException e) {
+            view.displayOrderNotFound();
+            view.displayErrorMessage(e.getMessage());
+        }
+
+        String newName = view.editCustomerName(editOrder.getCustomerName());
+
+        if (!newName.isBlank()) {
+            editOrder.setCustomerName(newName);
+        }
+
+        String newState = view.editState(editOrder.getState());
+
+        if (!newState.isBlank()) {
+            editOrder.setState(newState);
+        }
+
+        String newProductType = view.editProductType(editOrder.getProductType());
+
+        if (!newProductType.isBlank()) {
+            editOrder.setProductType(newProductType);
+        }
+
+        BigDecimal newArea = view.editArea(editOrder.getArea());
+
+        if (!newState.isBlank()) {
+            editOrder.setState(newState);
+        }
+
+        service.removeOrder(date, orderNo);
+        service.addOrder(date, editOrder);
+
     }
 
     /**

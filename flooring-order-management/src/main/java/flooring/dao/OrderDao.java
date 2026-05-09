@@ -11,5 +11,6 @@ public interface OrderDao {
     List<Order> getAllOrders(String date) throws OrderDaoPersistenceException;
     Order getOrder(String date, int orderNo) throws OrderDaoPersistenceException;
     Order removeOrder(String date, int orderNo) throws OrderDaoPersistenceException;
+    Order editOrder(String date, int orderNo, Order editedOrder) throws OrderDaoPersistenceException;
 
 }

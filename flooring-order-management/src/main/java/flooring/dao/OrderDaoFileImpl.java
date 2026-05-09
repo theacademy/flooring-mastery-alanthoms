@@ -50,6 +50,14 @@ public class OrderDaoFileImpl implements OrderDao {
         return removedOrder;
     }
 
+    @Override
+    public Order editOrder(String stringDateFileName, int orderNo, Order editedOrder) throws OrderDaoPersistenceException {
+        loadOrders(stringDateFileName);
+        Order removedOrder = orders.put(orderNo, editedOrder);
+        writeOrders(stringDateFileName);
+        return removedOrder;
+    }
+
 
     private Order unmarshallOrder(String orderAsText) {
 

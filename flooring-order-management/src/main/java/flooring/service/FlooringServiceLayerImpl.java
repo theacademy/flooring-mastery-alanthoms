@@ -35,6 +35,9 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public Order getOrder(String date, int orderNo) throws OrderDaoPersistenceException {
+        if (orderDao.getOrder(date, orderNo) == null) {
+            throw new OrderDaoPersistenceException("Order not found");
+        }
         return orderDao.getOrder(date, orderNo);
     }
 
@@ -43,6 +46,15 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         validateDate(date);
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
         return orderDao.removeOrder(stringDate, orderNo);
+    }
+
+
+    @Override
+    public Order editOrder(String date, int orderNo) throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+        validateDate(date);
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        Order prevOrder = orderDao.getOrder(stringDate, orderNo);
+        return orderDao.editOrder(stringDate, orderNo,  prevOrder);
     }
 
     private void validateOrderData(Order order) throws OrderDaoDataValidationException{
@@ -130,6 +142,8 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     private String getFileName(LocalDate date){
         return "Orders/Orders_" + date.format(DateTimeFormatter.ofPattern("MMddyyyy")) +".txt";
     }
+
+
 
 
 }

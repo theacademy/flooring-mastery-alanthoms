@@ -44,7 +44,6 @@ public class FlooringView {
         );
 
         Order order = new Order(orderNumber);
-
         order.setCustomerName(customerName);
         order.setState(state);
         order.setProductType(productType);
@@ -52,6 +51,7 @@ public class FlooringView {
 
         return order;
     }
+
 
 
     public void displayAddOrderBanner() {
@@ -78,6 +78,10 @@ public class FlooringView {
         io.print("=== REMOVE AN ORDER ===");
     }
 
+    public void displayEditOrderBanner() {
+        io.print("=== EDIT ORDER ===");
+    }
+
 
     public void displayRemoveSuccessBanner() {
         io.readString(
@@ -86,6 +90,10 @@ public class FlooringView {
     public void displaygetAllSuccessBanner() {
         io.readString(
                 "All Orders for date printed.  Please hit enter to continue");
+    }
+
+    public void displayEditSuccessBanner() {
+        io.readString("Order successfully EDITED.  Please hit enter to continue");
     }
 
 
@@ -112,6 +120,38 @@ public class FlooringView {
 
     public String printOptionAndGetDate() {
         return io.readString("Please enter the date you would like in MM/dd/yyyy format");
+    }
+
+    public String editCustomerName(String currentName) {
+        return io.readString(
+                "Enter customer name (" + currentName + "): "
+        );
+    }
+
+    public String editProductType(String currentProductType) {
+        return io.readString(
+                "Enter product type  (" + currentProductType + "): "
+        );
+    }
+
+    public String editState(String currentState) {
+        return io.readString(
+                "Enter state  (" + currentState + "): "
+        );
+    }
+
+    public BigDecimal editArea(BigDecimal currentArea) {
+        return new BigDecimal( io.readString(
+                "Enter state  (" + currentArea + "): "
+        )
+        );
+    }
+
+
+
+
+    public void displayOrderNotFound() {
+        io.print("Order not found");
     }
 
 
