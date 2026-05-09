@@ -154,6 +154,14 @@ public class FlooringView {
         io.print("Order not found");
     }
 
+    public boolean confirmAdd() {
+
+        String answer = io.readString(
+                "Place this order? (Y/N): ");
+
+        return answer.equalsIgnoreCase("Y");
+    }
+
 
 
 

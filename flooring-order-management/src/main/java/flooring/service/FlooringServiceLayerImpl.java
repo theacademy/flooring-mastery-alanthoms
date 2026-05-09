@@ -87,7 +87,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
 
     @Override
-    public void addOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
+    public Order prepareOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
         validateDate(date);
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
@@ -134,14 +134,27 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         order.setLaborCost(laborCost);
         order.setTax(taxAmount);
         order.setTotal(total);
-
-
-        orderDao.addOrder(stringDate, order.getOrderNumber(), order);
+        return order;
     }
 
     private String getFileName(LocalDate date){
         return "Orders/Orders_" + date.format(DateTimeFormatter.ofPattern("MMddyyyy")) +".txt";
     }
+
+    public void addOrder(String date, Order order)
+            throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
+
+        validateDate(date);
+
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+
+        orderDao.addOrder(
+                stringDate,
+                order.getOrderNumber(),
+                order);
+    }
+
+
 
 
 

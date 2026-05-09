@@ -1,8 +1,6 @@
 package flooring.controller;
 
 
-import flooring.dao.OrderDao;
-import flooring.dao.OrderDaoFileImpl;
 import flooring.dto.Order;
 import flooring.service.FlooringServiceLayer;
 import flooring.service.OrderDaoDataValidationException;
@@ -80,7 +78,8 @@ public class FlooringController {
         do {
             Order currentOrder = view.getNewOrderInfo();
             try {
-                service.addOrder(date, currentOrder);
+                Order preppedOrder = service.prepareOrder(date, currentOrder);
+                service.addOrder(date, preppedOrder);
                 view.displayAddOrderBanner();
                 hasErrors = false;
             } catch (OrderDaoDataValidationException | OrderDaoDuplicateIdException e){
@@ -136,7 +135,7 @@ public class FlooringController {
         }
 
         service.removeOrder(date, orderNo);
-        service.addOrder(date, editOrder);
+        service.prepareOrder(date, editOrder);
 
     }
 

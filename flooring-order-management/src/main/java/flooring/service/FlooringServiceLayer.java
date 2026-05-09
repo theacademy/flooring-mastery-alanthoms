@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FlooringServiceLayer {
 
-    void addOrder(String date, Order order) throws OrderDaoDuplicateIdException,
+    Order prepareOrder(String date, Order order) throws OrderDaoDuplicateIdException,
             OrderDaoDataValidationException,
             OrderDaoPersistenceException;
 
@@ -22,4 +22,8 @@ public interface FlooringServiceLayer {
 
     Order editOrder(String date, int orderNo) throws
             OrderDaoPersistenceException, OrderDaoDataValidationException;
+
+    void addOrder(String date, Order order) throws OrderDaoDuplicateIdException,
+            OrderDaoDataValidationException,
+            OrderDaoPersistenceException;
 }
