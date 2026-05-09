@@ -70,6 +70,10 @@ public class FlooringView {
         }
     }
 
+    public void displayOrder(Order order) {
+        io.print(order.toString());
+    }
+
     public void displayDisplayAllBanner() {
         io.print("=== DISPLAY ALL ORDERS ===");
     }

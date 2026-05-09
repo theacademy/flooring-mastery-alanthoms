@@ -80,6 +80,7 @@ public class FlooringController {
             try {
                 Order preppedOrder = service.prepareOrder(date, currentOrder);
                 service.addOrder(date, preppedOrder);
+                view.displayOrder(preppedOrder);
                 view.displayAddOrderBanner();
                 hasErrors = false;
             } catch (OrderDaoDataValidationException | OrderDaoDuplicateIdException e){
@@ -105,9 +106,12 @@ public class FlooringController {
         Order editOrder = null;
         try {
             editOrder = service.getOrder(date, orderNo);
+            view.displayOrder(editOrder);
+
         } catch (OrderDaoPersistenceException e) {
             view.displayOrderNotFound();
             view.displayErrorMessage(e.getMessage());
+            return;
         }
 
         String newName = view.editCustomerName(editOrder.getCustomerName());
@@ -130,6 +134,8 @@ public class FlooringController {
         service.removeOrder(date, orderNo);
         Order preppedOrder = service.prepareOrder(date, editOrder);
         service.addOrder(date, preppedOrder);
+
+        view.displayOrder(preppedOrder);
 
     }
 

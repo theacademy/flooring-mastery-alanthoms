@@ -35,10 +35,12 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public Order getOrder(String date, int orderNo) throws OrderDaoPersistenceException {
-        if (orderDao.getOrder(date, orderNo) == null) {
+
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        if (orderDao.getOrder(stringDate, orderNo) == null) {
             throw new OrderDaoPersistenceException("Order not found");
         }
-        return orderDao.getOrder(date, orderNo);
+        return orderDao.getOrder(stringDate, orderNo);
     }
 
     @Override
