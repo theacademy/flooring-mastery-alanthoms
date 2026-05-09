@@ -154,6 +154,22 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
                 order);
     }
 
+    public Order applyEdits(Order editOrder, String newName, String newState, String newProductType, BigDecimal newArea) throws OrderDaoDataValidationException, OrderDaoPersistenceException {
+        if (!newName.isBlank()) {
+            editOrder.setCustomerName(newName);
+        }
+        if (!newState.isBlank()) {
+            editOrder.setState(newState);
+        }
+        if (!newProductType.isBlank()) {
+            editOrder.setProductType(newProductType);
+        }
+        if (newArea != null) {
+            editOrder.setArea(newArea);
+        }
+        return editOrder;
+    }
+
 
 
 

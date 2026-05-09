@@ -2,6 +2,7 @@ package flooring.service;
 
 import flooring.dto.Order;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface FlooringServiceLayer {
@@ -26,4 +27,6 @@ public interface FlooringServiceLayer {
     void addOrder(String date, Order order) throws OrderDaoDuplicateIdException,
             OrderDaoDataValidationException,
             OrderDaoPersistenceException;
+
+    Order applyEdits(Order order, String name, String state, String product, BigDecimal area) throws OrderDaoDataValidationException, OrderDaoPersistenceException;
 }

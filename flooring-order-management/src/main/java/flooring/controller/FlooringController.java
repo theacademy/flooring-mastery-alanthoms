@@ -112,30 +112,24 @@ public class FlooringController {
 
         String newName = view.editCustomerName(editOrder.getCustomerName());
 
-        if (!newName.isBlank()) {
-            editOrder.setCustomerName(newName);
-        }
+
 
         String newState = view.editState(editOrder.getState());
 
-        if (!newState.isBlank()) {
-            editOrder.setState(newState);
-        }
+
 
         String newProductType = view.editProductType(editOrder.getProductType());
 
-        if (!newProductType.isBlank()) {
-            editOrder.setProductType(newProductType);
-        }
+
 
         BigDecimal newArea = view.editArea(editOrder.getArea());
 
-        if (!newState.isBlank()) {
-            editOrder.setState(newState);
-        }
+
+        editOrder = service.applyEdits(editOrder, newName, newState, newProductType, newArea);
 
         service.removeOrder(date, orderNo);
-        service.prepareOrder(date, editOrder);
+        Order preppedOrder = service.prepareOrder(date, editOrder);
+        service.addOrder(date, preppedOrder);
 
     }
 
