@@ -171,11 +171,11 @@ public class OrderDaoFileImpl implements OrderDao {
                     "Could not save order data.", e);
         }
 
-        // write header row first
 
         String orderAsText;
-
-        List<Order> orderList = this.getAllOrders(stringDateFileName);
+        //orders list is gathered using values not getAll as it would overwrite
+        //classRoster read from one single file and would not change
+        List<Order> orderList = new ArrayList<>(orders.values());
 
         for (Order currentOrder : orderList) {
 

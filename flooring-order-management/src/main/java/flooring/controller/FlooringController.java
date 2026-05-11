@@ -77,20 +77,24 @@ public class FlooringController {
         do {
 
             view.displayAddOrderBanner();
+
             String date = view.printOptionAndGetDate();
 
             String customerName = view.getCustomerName();
 
+            //display state info
             view.displayTaxList(service.getAllTaxes());
 
             String state = view.getState();
 
+            //display product info
             view.displayProductList(service.getAllProducts());
 
             String productType = view.getProductType();
 
             BigDecimal area = view.getArea();
 
+            //generate orderNo from orders in file
             int orderNo = service.getNextOrderNumber(date);
             Order currentOrder = new Order(orderNo);
 

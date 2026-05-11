@@ -281,12 +281,19 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
                 LocalDate.parse(date,
                         DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 
-        List<Order> orders = orderDao.getAllOrders(stringDate);
 
-        return orders.stream()
-                .mapToInt(Order::getOrderNumber)
-                .max()
-                .orElse(0) + 1;
+        try {
+
+            List<Order> orders = orderDao.getAllOrders(stringDate);
+
+            return orders.stream()
+                    .mapToInt(Order::getOrderNumber)
+                    .max()
+                    .orElse(0) + 1;
+
+        } catch (OrderDaoPersistenceException e) {
+            return 1;
+        }
     }
 
 

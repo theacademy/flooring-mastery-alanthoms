@@ -174,10 +174,12 @@ public class FlooringView {
     }
 
     public BigDecimal editArea(BigDecimal currentArea) {
-        return new BigDecimal( io.readString(
-                "Enter state  (" + currentArea + "): "
-        )
-        );
+        //enable empty response for applyEdit
+        String input = io.readString("Enter state  (" + currentArea + "): ");
+                if (input.isEmpty()) {
+                    return null;
+                }
+        return new BigDecimal(input);
     }
 
 
