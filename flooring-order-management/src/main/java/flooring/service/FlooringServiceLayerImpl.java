@@ -206,14 +206,22 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         }
     }
 
+    public void orderNoCheck(String date, Order order)
+            throws OrderDaoPersistenceException, OrderDaoDuplicateIdException {
+
+        String stringDate = getFileName(
+                LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+
+        if (orderDao.getOrder(stringDate, order.getOrderNumber()) != null) {
+            throw new OrderDaoDuplicateIdException(
+                    "Order number " + order.getOrderNumber() + " already exists.");
+        }
+    }
 
     @Override
     public Order prepareOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-        if(orderDao.getOrder(stringDate, order.getOrderNumber()) != null){
-            throw new OrderDaoDuplicateIdException("Order number" + order.getOrderNumber() + " already exists.");
-        }
 
         validateCustomerName(order.getCustomerName());
 

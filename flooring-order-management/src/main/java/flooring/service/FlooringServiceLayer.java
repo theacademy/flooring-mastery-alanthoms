@@ -42,5 +42,8 @@ public interface FlooringServiceLayer {
 
     int getNextOrderNumber(String date)
             throws OrderDaoPersistenceException, OrderDaoDataValidationException;
+
+    public void orderNoCheck(String date, Order order)
+            throws OrderDaoPersistenceException, OrderDaoDuplicateIdException ;
 }
 

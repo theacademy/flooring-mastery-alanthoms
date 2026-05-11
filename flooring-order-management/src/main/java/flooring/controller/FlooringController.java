@@ -105,6 +105,13 @@ public class FlooringController {
             currentOrder.setProductType(productType);
             currentOrder.setArea(area);
 
+            try {
+                service.orderNoCheck(date, currentOrder);
+            } catch (OrderDaoDuplicateIdException e) {
+                view.displayErrorMessage(e.getMessage());
+                return;
+            }
+
 
             try {
                 //calculate into full preppedOrder
@@ -142,10 +149,12 @@ public class FlooringController {
     }
 
     private void editOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException, OrderDaoDuplicateIdException {
+
         view.displayEditOrderBanner();
         String date = view.printOptionAndGetDate();
         int orderNo = view.getOrderNo();
         Order editOrder = null;
+
         try {
             editOrder = service.getOrder(date, orderNo);
             view.displayOrder(editOrder);
@@ -156,28 +165,34 @@ public class FlooringController {
             return;
         }
 
+        //View prints old value and asks for new one
         String newName = view.editCustomerName(editOrder.getCustomerName());
-
-
 
         String newState = view.editState(editOrder.getState());
 
-
-
         String newProductType = view.editProductType(editOrder.getProductType());
-
-
 
         BigDecimal newArea = view.editArea(editOrder.getArea());
 
-
+        //helper method, if values are null, leave previous value
         editOrder = service.applyEdits(editOrder, newName, newState, newProductType, newArea);
 
-        service.removeOrder(date, orderNo);
+
         Order preppedOrder = service.prepareOrder(date, editOrder);
-        service.addOrder(date, preppedOrder);
+
+        service.removeOrder(date, orderNo);
+
+        //edit works by removing old order and adding new one
 
         view.displayOrder(preppedOrder);
+
+        boolean confirm = view.confirmAdd();
+        if (confirm) {
+            service.addOrder(date, preppedOrder);
+            view.displayEditSuccessBanner();
+        } else {
+            view.displayCancelBanner();
+        }
 
     }
 

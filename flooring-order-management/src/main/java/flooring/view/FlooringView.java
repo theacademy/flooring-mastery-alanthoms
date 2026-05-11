@@ -82,7 +82,6 @@ public class FlooringView {
     }
 
 
-
     public void displayAddOrderBanner() {
         io.print("=== ADD ORDER ===");
     }
@@ -143,9 +142,6 @@ public class FlooringView {
     }
 
 
-
-
-
     public int getOrderNo() {
         return io.readInt("Please enter the order no..");
     }
@@ -188,11 +184,22 @@ public class FlooringView {
 
     public BigDecimal editArea(BigDecimal currentArea) {
         //enable empty response for applyEdit
+
+        while (true) {
         String input = io.readString("Enter area, in sq ft  (" + currentArea + "): ");
                 if (input.isEmpty()) {
                     return null;
                 }
-        return new BigDecimal(input);
+
+            try {
+                return new BigDecimal(input);
+
+            } catch (NumberFormatException e) {
+
+                io.print("ERROR: Please enter a valid decimal number.");
+            }
+        }
+
     }
 
 
@@ -205,7 +212,7 @@ public class FlooringView {
     public boolean confirmAdd() {
 
         String answer = io.readString(
-                "Place this order? (Y/N): ");
+                "Confirm your decision (Y/N): ");
 
         return answer.equalsIgnoreCase("Y");
     }
@@ -213,7 +220,7 @@ public class FlooringView {
     public boolean confirmRemove() {
 
         String answer = io.readString(
-                "Place this order? (Y/N): ");
+                "Confirm to REMOVE order (Y/N): ");
 
         return answer.equalsIgnoreCase("Y");
     }
