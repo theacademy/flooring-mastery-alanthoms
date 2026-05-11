@@ -71,19 +71,45 @@ public class FlooringController {
         return view.printMenuAndGetSelection();
     }
 
-    private void addOrder() throws OrderDaoPersistenceException{
-        view.displayAddOrderBanner();
-        String date = view.printOptionAndGetDate();
+    private void addOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+
         boolean hasErrors = false;
         do {
-            Order currentOrder = view.getNewOrderInfo();
+
+            view.displayAddOrderBanner();
+            String date = view.printOptionAndGetDate();
+
+            String customerName = view.getCustomerName();
+
+            view.displayTaxList(service.getAllTaxes());
+
+            String state = view.getState();
+
+            view.displayProductList(service.getAllProducts());
+
+            String productType = view.getProductType();
+
+            BigDecimal area = view.getArea();
+
+            int orderNo = service.getNextOrderNumber(date);
+            Order currentOrder = new Order(orderNo);
+
+            currentOrder.setCustomerName(customerName);
+            currentOrder.setState(state);
+            currentOrder.setProductType(productType);
+            currentOrder.setArea(area);
+
+
             try {
+
                 Order preppedOrder = service.prepareOrder(date, currentOrder);
                 service.addOrder(date, preppedOrder);
                 view.displayOrder(preppedOrder);
                 view.displayAddOrderBanner();
                 hasErrors = false;
+
             } catch (OrderDaoDataValidationException | OrderDaoDuplicateIdException e){
+
                 hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
             }

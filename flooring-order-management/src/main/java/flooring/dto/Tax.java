@@ -31,4 +31,14 @@ public class Tax {
     public void setTaxRate(BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
+
+
+    //Format Object to user-friendly string
+    @Override
+    public String toString() {
+        return "State Abbreviation: (" + stateAbbreviation
+                + ") | State Name: " + stateName
+                + " | Tax Rate: " + taxRate;
+
+    }
 }

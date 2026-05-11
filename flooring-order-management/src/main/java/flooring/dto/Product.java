@@ -31,4 +31,13 @@ public class Product {
     public void setLaborCostPerSquareFoot(BigDecimal laborCostPerSquareFoot) {
         this.laborCostPerSquareFoot = laborCostPerSquareFoot;
     }
+
+    //Format Object to user-friendly string
+    @Override
+    public String toString() {
+        return "Product Type: " + productType
+                + " | Cost Per Square Foot: " + costPerSquareFoot
+                + " | Labor Cost Per Square Foot: " + laborCostPerSquareFoot;
+
+    }
 }

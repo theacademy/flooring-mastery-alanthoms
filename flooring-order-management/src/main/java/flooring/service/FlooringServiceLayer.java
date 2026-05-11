@@ -1,6 +1,8 @@
 package flooring.service;
 
 import flooring.dto.Order;
+import flooring.dto.Product;
+import flooring.dto.Tax;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,4 +31,16 @@ public interface FlooringServiceLayer {
             OrderDaoPersistenceException;
 
     Order applyEdits(Order order, String name, String state, String product, BigDecimal area) throws OrderDaoDataValidationException, OrderDaoPersistenceException;
+
+
+    List<Product> getAllProducts() throws
+            OrderDaoPersistenceException, OrderDaoDataValidationException;
+
+
+    List<Tax> getAllTaxes() throws OrderDaoDataValidationException, OrderDaoPersistenceException;
+
+
+    int getNextOrderNumber(String date)
+            throws OrderDaoPersistenceException, OrderDaoDataValidationException;
 }
+

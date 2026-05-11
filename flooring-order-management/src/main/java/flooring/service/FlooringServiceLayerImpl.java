@@ -34,6 +34,16 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     }
 
     @Override
+    public List<Product> getAllProducts()
+            throws OrderDaoPersistenceException {
+        return productDao.getAllProducts();
+    }
+
+    public List<Tax> getAllTaxes() throws OrderDaoPersistenceException {
+        return taxDao.getAllTaxes();
+    }
+
+    @Override
     public Order getOrder(String date, int orderNo) throws OrderDaoPersistenceException {
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
@@ -41,6 +51,18 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
             throw new OrderDaoPersistenceException("Order not found");
         }
         return orderDao.getOrder(stringDate, orderNo);
+    }
+
+    public void addOrder(String date, Order order)
+            throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
+
+
+        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+
+        orderDao.addOrder(
+                stringDate,
+                order.getOrderNumber(),
+                order);
     }
 
     @Override
@@ -62,8 +84,9 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     private void validateOrderData(Order order) throws OrderDaoDataValidationException{
 
         if (order.getCustomerName() == null
-                || order.getCustomerName().trim().isEmpty()
-                || order.getState() == null
+                || order.getCustomerName().trim().isEmpty())
+            throw new OrderDaoDataValidationException("Customer name is empty");
+        if( order.getState() == null
                 || order.getState().trim().isEmpty()
                 || order.getProductType() == null
                 || order.getProductType().trim().isEmpty()
@@ -74,6 +97,93 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
                     "ERROR: Customer Name, State, Product Type, and Area are required and must be valid.");
         }
     }
+
+
+
+
+    private void validateCustomerName(String name)
+            throws OrderDaoDataValidationException {
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new OrderDaoDataValidationException(
+                    "ERROR: Customer name is required.");
+        }
+
+        if (!name.matches("[a-zA-Z0-9., ]+")) {
+
+            throw new OrderDaoDataValidationException(
+                    "ERROR: Customer name contains invalid characters.");
+        }
+    }
+
+    private Tax validateState(String state)
+            throws OrderDaoDataValidationException,
+            OrderDaoPersistenceException {
+
+        if (state == null || state.trim().isEmpty()) {
+
+            throw new OrderDaoDataValidationException(
+                    "ERROR: State is required.");
+        }
+
+        Tax tax = taxDao.getTax(state);
+
+        if (tax == null) {
+
+            throw new OrderDaoDataValidationException(
+                    "ERROR: We do not sell in " + state + ".");
+        }
+
+        return tax;
+    }
+
+    private Product validateProductType(String productType)
+            throws OrderDaoDataValidationException,
+            OrderDaoPersistenceException {
+
+        if (productType == null || productType.trim().isEmpty()) {
+
+            throw new OrderDaoDataValidationException(
+                    "ERROR: Product Type is required.");
+        }
+
+        Product product = productDao.getProduct(productType);
+
+        if (product == null) {
+
+            throw new OrderDaoDataValidationException(
+                    "ERROR: We do not sell  " + productType + ".");
+        }
+
+        return product;
+    }
+
+
+
+
+    private void validateArea(BigDecimal area)
+            throws OrderDaoDataValidationException {
+
+        if (area == null) {
+            throw new OrderDaoDataValidationException(
+                    "ERROR: Area is required.");
+        }
+
+        if (area.compareTo(new BigDecimal("100")) < 0) {
+            throw new OrderDaoDataValidationException(
+                    "ERROR: Minimum order size is 100 sq ft.");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
     private void validateDate(String date) throws OrderDaoDataValidationException{
         try {
@@ -98,28 +208,21 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public Order prepareOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
-        validateDate(date);
+        validateFutureDate(date);
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
         if(orderDao.getOrder(stringDate, order.getOrderNumber()) != null){
             throw new OrderDaoDuplicateIdException("Order number" + order.getOrderNumber() + " already exists.");
         }
-        validateOrderData(order);
 
-        Tax tax = taxDao.getTax(order.getState());
+        validateCustomerName(order.getCustomerName());
 
-        if (tax == null) {
-            throw new UnsupportedOperationException(
-                    "ERROR: State " + order.getState() + " not found.");
-        }
+        validateArea(order.getArea());
 
+        Tax tax = validateState(order.getState());
 
-        Product product = productDao.getProduct(order.getProductType());
-        if (product == null) {
-            throw new UnsupportedOperationException(
-                    "ERROR: Product type " + order.getProductType() + " not found.");
-        }
-
+        Product product =
+                validateProductType(order.getProductType());
 
         order.setTaxRate(tax.getTaxRate());
         order.setCostPerSquareFoot(product.getCostPerSquareFoot());
@@ -151,18 +254,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         return "Orders/Orders_" + date.format(DateTimeFormatter.ofPattern("MMddyyyy")) +".txt";
     }
 
-    public void addOrder(String date, Order order)
-            throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
 
-        validateFutureDate(date);
-
-        String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-
-        orderDao.addOrder(
-                stringDate,
-                order.getOrderNumber(),
-                order);
-    }
 
     public Order applyEdits(Order editOrder, String newName, String newState, String newProductType, BigDecimal newArea) throws OrderDaoDataValidationException, OrderDaoPersistenceException {
         if (!newName.isBlank()) {
@@ -180,6 +272,22 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         return editOrder;
     }
 
+    public int getNextOrderNumber(String date)
+            throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+
+        validateDate(date);
+
+        String stringDate = getFileName(
+                LocalDate.parse(date,
+                        DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+
+        List<Order> orders = orderDao.getAllOrders(stringDate);
+
+        return orders.stream()
+                .mapToInt(Order::getOrderNumber)
+                .max()
+                .orElse(0) + 1;
+    }
 
 
 

@@ -1,6 +1,8 @@
 package flooring.view;
 
 import flooring.dto.Order;
+import flooring.dto.Product;
+import flooring.dto.Tax;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -52,6 +54,20 @@ public class FlooringView {
         return order;
     }
 
+    public String getCustomerName() {
+        return io.readString("Please enter Customer Name");
+    }
+    public String getState() {
+        return io.readString("Please enter State (abbreviation)");
+    }
+    public String getProductType() {
+        return io.readString("Please enter Product Type");
+    }
+
+    public BigDecimal getArea() {
+        return new BigDecimal(io.readString("Please enter Area"));
+    }
+
 
 
     public void displayAddOrderBanner() {
@@ -73,6 +89,19 @@ public class FlooringView {
     public void displayOrder(Order order) {
         io.print(order.toString());
     }
+
+    public void displayProductList(List<Product> products) {
+        for (Product product : products) {
+            io.print(product.toString());
+        }
+    }
+
+    public void displayTaxList(List<Tax> taxes) {
+        for (Tax tax : taxes) {
+            io.print(tax.toString());
+        }
+    }
+
 
     public void displayDisplayAllBanner() {
         io.print("=== DISPLAY ALL ORDERS ===");
