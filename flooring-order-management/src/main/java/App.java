@@ -6,18 +6,13 @@ import flooring.view.FlooringView;
 import flooring.view.UserIO;
 import flooring.view.UserIOConsoleImpl;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class App {
     public static void main(String[] args) {
-        UserIO io = new UserIOConsoleImpl();
-        FlooringView myView = new FlooringView(io);
-        OrderDao orderDao = new OrderDaoFileImpl();
-        TaxDao taxDao = new TaxDaoFileImpl();
-        ProductDao productDao = new ProductDaoFileImpl();
-        ExportDao exportDao = new ExportDaoFileImpl();
-
-        FlooringServiceLayer myService = new FlooringServiceLayerImpl(orderDao,  productDao, taxDao, exportDao);
-
-        FlooringController controller = new FlooringController(myService, myView);
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FlooringController controller = ctx.getBean("controller", FlooringController.class);
         controller.run();
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/mvc
+          http://www.springframework.org/schema/mvc/spring-mvc.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+          http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+
+    <bean id="orderDao" class="flooring.dao.OrderDaoFileImpl"/>
+    <bean id="taxDao" class="flooring.dao.TaxDaoFileImpl"/>
+    <bean id="productDao" class="flooring.dao.ProductDaoFileImpl"/>
+    <bean id="exportDao" class="flooring.dao.ExportDaoFileImpl"/>
+
+    <!-- Bean definitions go here -->
+    <bean id="myService" class="flooring.service.FlooringServiceLayerImpl">
+        <constructor-arg ref="orderDao"/>
+        <constructor-arg ref="productDao"/>
+        <constructor-arg ref="taxDao"/>
+        <constructor-arg ref="exportDao"/>
+    </bean>
+
+    <bean id="io" class="flooring.view.UserIOConsoleImpl"/>
+
+    <bean id="myView" class="flooring.view.FlooringView">
+        <constructor-arg ref="io"/>
+    </bean>
+
+    <bean id="controller" class="flooring.controller.FlooringController">
+        <constructor-arg ref="myService"/>
+        <constructor-arg ref="myView"/>
+    </bean>
+
+</beans>

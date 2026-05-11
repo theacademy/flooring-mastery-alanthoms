@@ -3,6 +3,9 @@ package flooring.service;
 
 import flooring.dto.Order;
 import org.junit.jupiter.api.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.math.BigDecimal;
 import java.io.*;
 import java.util.List;
@@ -123,5 +126,37 @@ public class FlooringServiceLayerImplTest {
         assertThrows(Exception.class, () ->
                 service.getAllOrders("notadate")
         );
+    }
+
+    @Test
+    public void testEditOrder() throws Exception {
+        Order order = createTestOrder(1, "Bob");
+        Order prepped = service.prepareOrder("12/12/2030", order);
+        service.addOrder("12/12/2030", prepped);
+
+        // apply edit to name
+        Order edited = service.applyEdits(prepped, "Robert", "", "", null);
+        Order preppedEdit = service.prepareOrder("12/12/2030", edited);
+        service.editOrder("12/12/2030", 1, preppedEdit);
+
+        Order retrieved = service.getOrder("12/12/2030", 1);
+        assertEquals("Robert", retrieved.getCustomerName());
+    }
+
+    @Test
+    public void testEditOrderKeepsUnchangedFields() throws Exception {
+        Order order = createTestOrder(1, "Bob");
+        Order prepped = service.prepareOrder("12/12/2030", order);
+        service.addOrder("12/12/2030", prepped);
+
+        // only change name, everything else blank/null
+        Order edited = service.applyEdits(prepped, "Robert", "", "", null);
+        Order preppedEdit = service.prepareOrder("12/12/2030", edited);
+        service.editOrder("12/12/2030", 1, preppedEdit);
+
+        Order retrieved = service.getOrder("12/12/2030", 1);
+        assertEquals("WA", retrieved.getState());
+        assertEquals("Wood", retrieved.getProductType());
+        assertEquals(new BigDecimal("150"), retrieved.getArea());
     }
 }
