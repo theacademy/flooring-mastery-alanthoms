@@ -13,8 +13,9 @@ public class App {
         OrderDao orderDao = new OrderDaoFileImpl();
         TaxDao taxDao = new TaxDaoFileImpl();
         ProductDao productDao = new ProductDaoFileImpl();
+        ExportDao exportDao = new ExportDaoFileImpl();
 
-        FlooringServiceLayer myService = new FlooringServiceLayerImpl(orderDao,  productDao, taxDao);
+        FlooringServiceLayer myService = new FlooringServiceLayerImpl(orderDao,  productDao, taxDao, exportDao);
 
         FlooringController controller = new FlooringController(myService, myView);
         controller.run();

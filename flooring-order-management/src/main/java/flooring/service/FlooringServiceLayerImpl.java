@@ -21,10 +21,11 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     TaxDao taxDao;
     ExportDao exportDao;
 
-    public FlooringServiceLayerImpl(OrderDao orderDao, ProductDao productDao, TaxDao taxDao) {
+    public FlooringServiceLayerImpl(OrderDao orderDao, ProductDao productDao, TaxDao taxDao, ExportDao exportDao) {
         this.orderDao = orderDao;
         this.productDao = productDao;
         this.taxDao = taxDao;
+        this.exportDao = exportDao;
     }
 
 

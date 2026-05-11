@@ -6,6 +6,7 @@ import flooring.service.OrderDaoPersistenceException;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -200,9 +201,19 @@ public class OrderDaoFileImpl implements OrderDao {
         //loop through add all values to list
         for (File file : orderFiles) {
             loadOrders(file.getPath());
+            String formattedDate = getDateFromFilename(file.getName());
+            LocalDate date = LocalDate.parse(formattedDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            for (Order order : orders.values()) {
+                order.setOrderDate(date);
+            }
             allOrders.addAll(orders.values());
         }
         return allOrders;
+    }
+
+    public String getDateFromFilename(String fileName) throws OrderDaoPersistenceException {
+        String rawDate = fileName.replace("Orders_", "").replace(".txt", ""); // "06012026"
+        return rawDate.substring(0, 2) + "/" + rawDate.substring(2, 4) + "/" + rawDate.substring(4); // "06/01/2026"
     }
 
 

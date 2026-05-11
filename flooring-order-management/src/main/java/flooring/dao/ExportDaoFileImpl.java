@@ -35,7 +35,9 @@ public class ExportDaoFileImpl implements ExportDao {
 
     private String marshallOrder(Order order) {
 
-        String orderAsText = order.getOrderNumber() + DELIMITER;
+        String orderAsText = order.getOrderDate().toString() + DELIMITER;
+
+        orderAsText += order.getOrderNumber() + DELIMITER;
 
         orderAsText += order.getCustomerName() + DELIMITER;
 
