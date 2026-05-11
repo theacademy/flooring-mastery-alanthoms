@@ -67,7 +67,6 @@ public class ProductDaoFileImpl implements ProductDao {
             throw new RuntimeException("Could not load tax data.", e);
         }
 
-        scanner.nextLine(); // skip header
 
         while (scanner.hasNextLine()) {
 

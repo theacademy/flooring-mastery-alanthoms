@@ -1,0 +1,2 @@
+WA,Washington,9.25
+TX,Texas,4.45

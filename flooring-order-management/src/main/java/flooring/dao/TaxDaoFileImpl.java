@@ -9,6 +9,14 @@ import java.io.FileReader;
 import java.math.BigDecimal;
 import java.util.*;
 
+import flooring.dto.Product;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.math.BigDecimal;
+import java.util.*;
+
 public class TaxDaoFileImpl implements TaxDao {
 
 
@@ -64,7 +72,6 @@ public class TaxDaoFileImpl implements TaxDao {
             throw new RuntimeException("Could not load tax data.", e);
         }
 
-        scanner.nextLine(); // skip header
 
         while (scanner.hasNextLine()) {
 
