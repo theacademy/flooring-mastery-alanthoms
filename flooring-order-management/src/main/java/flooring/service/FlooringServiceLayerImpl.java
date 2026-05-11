@@ -82,24 +82,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         return orderDao.editOrder(stringDate, orderNo,  prevOrder);
     }
 
-    private void validateOrderData(Order order) throws OrderDaoDataValidationException{
-
-        if (order.getCustomerName() == null
-                || order.getCustomerName().trim().isEmpty())
-            throw new OrderDaoDataValidationException("Customer name is empty");
-        if( order.getState() == null
-                || order.getState().trim().isEmpty()
-                || order.getProductType() == null
-                || order.getProductType().trim().isEmpty()
-                || order.getArea() == null
-                || order.getArea().compareTo(BigDecimal.ZERO) <= 0) {
-
-            throw new OrderDaoDataValidationException(
-                    "ERROR: Customer Name, State, Product Type, and Area are required and must be valid.");
-        }
-    }
-
-
 
 
     private void validateCustomerName(String name)
@@ -175,16 +157,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
                     "ERROR: Minimum order size is 100 sq ft.");
         }
     }
-
-
-
-
-
-
-
-
-
-
 
     private void validateDate(String date) throws OrderDaoDataValidationException{
         try {

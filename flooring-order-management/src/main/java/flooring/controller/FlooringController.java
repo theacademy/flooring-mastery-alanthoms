@@ -182,14 +182,14 @@ public class FlooringController {
 
         Order preppedOrder = service.prepareOrder(date, editOrder);
 
-        service.removeOrder(date, orderNo);
-
         //edit works by removing old order and adding new one
 
         view.displayOrder(preppedOrder);
 
         boolean confirm = view.confirmAdd();
         if (confirm) {
+
+            service.removeOrder(date, orderNo);
             service.addOrder(date, preppedOrder);
             view.displayEditSuccessBanner();
         } else {
