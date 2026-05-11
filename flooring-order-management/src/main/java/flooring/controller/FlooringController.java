@@ -82,7 +82,7 @@ public class FlooringController {
 
             String customerName = view.getCustomerName();
 
-            //display state info
+            //display tax & state info
             view.displayTaxList(service.getAllTaxes());
 
             String state = view.getState();
@@ -96,6 +96,8 @@ public class FlooringController {
 
             //generate orderNo from orders in file
             int orderNo = service.getNextOrderNumber(date);
+
+            //create Order object and set values
             Order currentOrder = new Order(orderNo);
 
             currentOrder.setCustomerName(customerName);
@@ -105,11 +107,19 @@ public class FlooringController {
 
 
             try {
-
+                //calculate into full preppedOrder
                 Order preppedOrder = service.prepareOrder(date, currentOrder);
-                service.addOrder(date, preppedOrder);
                 view.displayOrder(preppedOrder);
-                view.displayAddOrderBanner();
+                boolean confirm = view.confirmAdd();
+                if (confirm) {
+
+                    service.addOrder(date, preppedOrder);
+                    view.displayAddOrderSuccessBanner();
+
+                }
+                else {
+                    view.displayCancelBanner();
+                }
                 hasErrors = false;
 
             } catch (OrderDaoDataValidationException | OrderDaoDuplicateIdException e){

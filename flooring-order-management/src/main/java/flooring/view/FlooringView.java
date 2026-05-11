@@ -68,7 +68,7 @@ public class FlooringView {
 
         while (true) {
 
-            String input = io.readString("Please enter Area");
+            String input = io.readString("Please enter Area (sq ft), must be greater than 100 sq ft.");
 
             try {
 
@@ -208,6 +208,18 @@ public class FlooringView {
                 "Place this order? (Y/N): ");
 
         return answer.equalsIgnoreCase("Y");
+    }
+
+    public boolean confirmRemove() {
+
+        String answer = io.readString(
+                "Place this order? (Y/N): ");
+
+        return answer.equalsIgnoreCase("Y");
+    }
+
+    public void displayCancelBanner(){
+        io.print("=== CANCELED ACTION ===");
     }
 
 
