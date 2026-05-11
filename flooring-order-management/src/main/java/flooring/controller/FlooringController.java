@@ -109,10 +109,12 @@ public class FlooringController {
             try {
                 //calculate into full preppedOrder
                 Order preppedOrder = service.prepareOrder(date, currentOrder);
+                //display full order
                 view.displayOrder(preppedOrder);
+                //user confirmation
                 boolean confirm = view.confirmAdd();
                 if (confirm) {
-
+                    //if yes then add order
                     service.addOrder(date, preppedOrder);
                     view.displayAddOrderSuccessBanner();
 

@@ -59,6 +59,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 
+        validateFutureDate(date);
         orderDao.addOrder(
                 stringDate,
                 order.getOrderNumber(),
@@ -208,7 +209,6 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public Order prepareOrder(String date, Order order) throws OrderDaoDuplicateIdException, OrderDaoDataValidationException, OrderDaoPersistenceException {
-        validateFutureDate(date);
 
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
         if(orderDao.getOrder(stringDate, order.getOrderNumber()) != null){

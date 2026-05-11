@@ -188,7 +188,7 @@ public class FlooringView {
 
     public BigDecimal editArea(BigDecimal currentArea) {
         //enable empty response for applyEdit
-        String input = io.readString("Enter state  (" + currentArea + "): ");
+        String input = io.readString("Enter area, in sq ft  (" + currentArea + "): ");
                 if (input.isEmpty()) {
                     return null;
                 }
