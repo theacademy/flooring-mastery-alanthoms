@@ -13,8 +13,18 @@ public class TaxDaoFileImpl implements TaxDao {
 
 
     private Map<String, Tax> taxes = new HashMap<>();
-    private static final String TAXES_FILE = "data/Taxes.txt";
+    private  final String TAXES_FILE;
     private static final String DELIMITER = ",";
+
+
+    //pair of constructors for testing, one allows injection upon construction
+    public TaxDaoFileImpl(){
+        TAXES_FILE = "data/Taxes.txt";
+    }
+
+    public TaxDaoFileImpl(String taxTextFile){
+        TAXES_FILE = taxTextFile;
+    }
 
     @Override
     public List<Tax> getAllTaxes() {

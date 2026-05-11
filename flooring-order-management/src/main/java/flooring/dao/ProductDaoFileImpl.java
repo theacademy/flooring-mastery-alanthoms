@@ -12,9 +12,18 @@ import java.util.*;
 public class ProductDaoFileImpl implements ProductDao {
 
     private Map<String, Product> products = new HashMap<>();
-    private static final String PRODUCTS_FILE = "data/Products.txt";
+    private  final String PRODUCTS_FILE;
     private static final String DELIMITER = ",";
 
+
+    //pair of constructors for testing, one allows injection upon construction
+    public ProductDaoFileImpl(){
+        PRODUCTS_FILE = "data/Products.txt";
+    }
+
+    public ProductDaoFileImpl(String taxTextFile){
+        PRODUCTS_FILE = taxTextFile;
+    }
 
     @Override
     public List<Product> getAllProducts() {
