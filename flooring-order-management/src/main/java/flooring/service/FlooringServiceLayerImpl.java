@@ -1,5 +1,6 @@
 package flooring.service;
 
+import flooring.dao.ExportDao;
 import flooring.dao.OrderDao;
 import flooring.dao.ProductDao;
 import flooring.dao.TaxDao;
@@ -18,6 +19,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     OrderDao orderDao;
     ProductDao productDao;
     TaxDao taxDao;
+    ExportDao exportDao;
 
     public FlooringServiceLayerImpl(OrderDao orderDao, ProductDao productDao, TaxDao taxDao) {
         this.orderDao = orderDao;
@@ -275,6 +277,13 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
             return 1;
         }
     }
+
+
+    public void exportAllOrders() throws OrderDaoPersistenceException {
+        List<Order> allOrders = orderDao.getAllOrdersAllDates();
+        exportDao.exportAllOrders(allOrders, "Backup/DataExport.txt");
+    }
+
 
 
 

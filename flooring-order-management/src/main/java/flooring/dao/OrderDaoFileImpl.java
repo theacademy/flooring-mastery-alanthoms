@@ -189,4 +189,21 @@ public class OrderDaoFileImpl implements OrderDao {
         out.close();
     }
 
+    public List<Order> getAllOrdersAllDates() throws OrderDaoPersistenceException {
+        //get orders folder and files inside ending in txt
+        File ordersDir = new File("Orders");
+        File[] orderFiles = ordersDir.listFiles((dir, name) -> name.endsWith(".txt"));
+
+        List<Order> allOrders = new ArrayList<>();
+        //return empty arraylist if null
+        if (orderFiles == null) return allOrders;
+        //loop through add all values to list
+        for (File file : orderFiles) {
+            loadOrders(file.getPath());
+            allOrders.addAll(orders.values());
+        }
+        return allOrders;
+    }
+
+
 }

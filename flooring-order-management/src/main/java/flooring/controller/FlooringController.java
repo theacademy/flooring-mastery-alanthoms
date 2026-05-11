@@ -30,10 +30,15 @@ public class FlooringController {
 
 
     int menuSelection = 0;
+
     public void run() {
+
         boolean keepGoing = true;
+
         while (keepGoing) {
+
             try {
+
                 menuSelection = getMenuSelection();
 
                 switch (menuSelection) {
@@ -50,7 +55,8 @@ public class FlooringController {
                         removeOrder();
                         break;
                     case 5:
-                        io.print("EXPORT ALL DATA");
+                        service.exportAllOrders();
+                        io.print("Data exported to Backup/DataExport.txt");
                         break;
                     case 6:
                         keepGoing = false;
@@ -198,20 +204,16 @@ public class FlooringController {
 
     }
 
-    /**
-    private void viewOrder() throws ClassRosterPersistenceException {
-        view.displayDisplayStudentBanner();
-        String studentId = view.getStudentIdChoice();
-        Student student = service.getOrder(studentId);
-        view.displayStudent(student);
-    }*/
 
     private void removeOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+
         view.displayRemoveBanner();
         String date = view.printOptionAndGetDate();
         int orderNo = view.getOrderNo();
         view.displayOrder(service.getOrder(date, orderNo));
+
         boolean confirm =  view.confirmRemove();
+
         if (confirm) {
             service.removeOrder(date, orderNo);
             view.displayRemoveSuccessBanner();
