@@ -168,8 +168,10 @@ public class FlooringController {
         //View prints old value and asks for new one
         String newName = view.editCustomerName(editOrder.getCustomerName());
 
+        view.displayTaxList(service.getAllTaxes());
         String newState = view.editState(editOrder.getState());
 
+        view.displayProductList(service.getAllProducts());
         String newProductType = view.editProductType(editOrder.getProductType());
 
         BigDecimal newArea = view.editArea(editOrder.getArea());
