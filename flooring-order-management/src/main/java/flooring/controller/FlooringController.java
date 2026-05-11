@@ -208,8 +208,15 @@ public class FlooringController {
         view.displayRemoveBanner();
         String date = view.printOptionAndGetDate();
         int orderNo = view.getOrderNo();
-        service.removeOrder(date, orderNo);
-        view.displayRemoveSuccessBanner();
+        view.displayOrder(service.getOrder(date, orderNo));
+        boolean confirm =  view.confirmRemove();
+        if (confirm) {
+            service.removeOrder(date, orderNo);
+            view.displayRemoveSuccessBanner();
+        }
+        else {
+            view.displayCancelBanner();
+        }
     }
     private void unknownCommand() {
         view.displayUnknownCommandBanner();
