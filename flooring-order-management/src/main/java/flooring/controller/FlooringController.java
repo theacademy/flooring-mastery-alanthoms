@@ -21,26 +21,29 @@ public class FlooringController {
     private FlooringView view;
     private FlooringServiceLayer service;
 
+    //injection with constructor
     public  FlooringController( FlooringServiceLayer service, FlooringView view) {
+
         this.service = service;
         this.view = view;
+
     }
-
-
 
 
     int menuSelection = 0;
 
     public void run() {
 
+        //loop for menu
         boolean keepGoing = true;
 
         while (keepGoing) {
 
             try {
 
+                // get menuSelection with input validation
                 menuSelection = getMenuSelection();
-
+                //switch case to handle choices
                 switch (menuSelection) {
                     case 1:
                         listOrders();
@@ -55,14 +58,13 @@ public class FlooringController {
                         removeOrder();
                         break;
                     case 5:
-                        service.exportAllOrders();
-                        io.print("Data exported to Backup/DataExport.txt");
+                        exportOrders();
                         break;
                     case 6:
                         keepGoing = false;
                         break;
                     default:
-                        io.print("UNKNOWN COMMAND");
+                        view.displayUnknownCommandBanner();
                 }
 
             } catch (OrderDaoPersistenceException | OrderDaoDataValidationException | OrderDaoDuplicateIdException e) {
@@ -112,6 +114,7 @@ public class FlooringController {
             currentOrder.setArea(area);
 
             try {
+                //check if orderNo already exists
                 service.orderNoCheck(date, currentOrder);
             } catch (OrderDaoDuplicateIdException e) {
                 view.displayErrorMessage(e.getMessage());
@@ -137,6 +140,7 @@ public class FlooringController {
                 }
                 hasErrors = false;
 
+                //catch errors and display appropriate error message
             } catch (OrderDaoDataValidationException | OrderDaoDuplicateIdException e){
 
                 hasErrors = true;
@@ -146,8 +150,10 @@ public class FlooringController {
 
     }
 
+
     private void listOrders() throws OrderDaoPersistenceException, OrderDaoDataValidationException {
         view.displayDisplayAllBanner();
+        //Prompt user for date with validation
         String date = view.printOptionAndGetDate();
         List<Order> orderList = service.getAllOrders(date);
         view.displayOrderList(orderList);
@@ -156,11 +162,15 @@ public class FlooringController {
 
     private void editOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException, OrderDaoDuplicateIdException {
 
+
         view.displayEditOrderBanner();
+
+        //Prompt user for date with validation
         String date = view.printOptionAndGetDate();
         int orderNo = view.getOrderNo();
         Order editOrder = null;
 
+        //try and find order otherwise return not found message
         try {
             editOrder = service.getOrder(date, orderNo);
             view.displayOrder(editOrder);
@@ -174,9 +184,11 @@ public class FlooringController {
         //View prints old value and asks for new one
         String newName = view.editCustomerName(editOrder.getCustomerName());
 
+        //display all taxes to help user
         view.displayTaxList(service.getAllTaxes());
         String newState = view.editState(editOrder.getState());
 
+        //display all products to help user
         view.displayProductList(service.getAllProducts());
         String newProductType = view.editProductType(editOrder.getProductType());
 
@@ -185,18 +197,18 @@ public class FlooringController {
         //helper method, if values are null, leave previous value
         editOrder = service.applyEdits(editOrder, newName, newState, newProductType, newArea);
 
-
+        //calculate remaining values from product and taxes file
         Order preppedOrder = service.prepareOrder(date, editOrder);
 
         //edit works by removing old order and adding new one
-
+        //inefficient should have been changed to use put
+        //nevermind has been changed to use editOrder
         view.displayOrder(preppedOrder);
 
         boolean confirm = view.confirmAdd();
         if (confirm) {
 
-            service.removeOrder(date, orderNo);
-            service.addOrder(date, preppedOrder);
+            service.editOrder(date, orderNo, preppedOrder);
             view.displayEditSuccessBanner();
         } else {
             view.displayCancelBanner();
@@ -208,6 +220,7 @@ public class FlooringController {
     private void removeOrder() throws OrderDaoPersistenceException, OrderDaoDataValidationException {
 
         view.displayRemoveBanner();
+
         String date = view.printOptionAndGetDate();
         int orderNo = view.getOrderNo();
         view.displayOrder(service.getOrder(date, orderNo));
@@ -215,6 +228,7 @@ public class FlooringController {
         boolean confirm =  view.confirmRemove();
 
         if (confirm) {
+            //calls remove order from service to simply remove
             service.removeOrder(date, orderNo);
             view.displayRemoveSuccessBanner();
         }
@@ -224,5 +238,13 @@ public class FlooringController {
     }
     private void unknownCommand() {
         view.displayUnknownCommandBanner();
+    }
+
+    private void exportOrders() throws OrderDaoPersistenceException {
+        view.displayExportOrdersBanner();
+        //calls export all orders function
+        service.exportAllOrders();
+        view.displayExportSuccessBanner();
+
     }
 }

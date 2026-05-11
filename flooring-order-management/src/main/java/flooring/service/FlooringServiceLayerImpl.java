@@ -21,6 +21,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     TaxDao taxDao;
     ExportDao exportDao;
 
+    //injection constructor
     public FlooringServiceLayerImpl(OrderDao orderDao, ProductDao productDao, TaxDao taxDao, ExportDao exportDao) {
         this.orderDao = orderDao;
         this.productDao = productDao;
@@ -78,11 +79,11 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
 
     @Override
-    public Order editOrder(String date, int orderNo) throws OrderDaoPersistenceException, OrderDaoDataValidationException {
+    public Order editOrder(String date, int orderNo, Order editedOrder) throws OrderDaoPersistenceException, OrderDaoDataValidationException {
         validateDate(date);
         String stringDate = getFileName(LocalDate.parse(date, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-        Order prevOrder = orderDao.getOrder(stringDate, orderNo);
-        return orderDao.editOrder(stringDate, orderNo,  prevOrder);
+
+        return orderDao.editOrder(stringDate, orderNo,  editedOrder);
     }
 
 

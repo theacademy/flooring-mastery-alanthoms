@@ -127,6 +127,10 @@ public class FlooringView {
         io.print("=== EDIT ORDER ===");
     }
 
+    public void displayExportOrdersBanner() {
+        io.print("=== EXPORT ORDERS ===");
+    }
+
 
     public void displayRemoveSuccessBanner() {
         io.readString(
@@ -135,6 +139,10 @@ public class FlooringView {
     public void displaygetAllSuccessBanner() {
         io.readString(
                 "All Orders for date printed.  Please hit enter to continue");
+    }
+
+    public void displayExportSuccessBanner() {
+        io.readString("Data successfully exported to Backup/DataExport.txt. Please hit enter to continue");
     }
 
     public void displayEditSuccessBanner() {

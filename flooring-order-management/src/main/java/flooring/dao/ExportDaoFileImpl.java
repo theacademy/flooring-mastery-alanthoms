@@ -11,12 +11,14 @@ import java.io.PrintWriter;
 
 public class ExportDaoFileImpl implements ExportDao {
 
+    //comma delineation
     public static final String DELIMITER = ",";
 
     @Override
     public void exportAllOrders(List<Order> orders, String exportFileName)
             throws OrderDaoPersistenceException {
 
+        //get the directory from filename in case it doesn't exist
         new File(exportFileName).getParentFile().mkdirs();
 
         PrintWriter out;
@@ -26,6 +28,7 @@ public class ExportDaoFileImpl implements ExportDao {
             throw new OrderDaoPersistenceException("Could not export data.", e);
         }
 
+        //loop through marshall data and then write
         for (Order order : orders) {
             out.println(marshallOrder(order));
             out.flush();
@@ -35,6 +38,7 @@ public class ExportDaoFileImpl implements ExportDao {
 
     private String marshallOrder(Order order) {
 
+        //added orderDate to export to differentiate between same orderNo for different files
         String orderAsText = order.getOrderDate().toString() + DELIMITER;
 
         orderAsText += order.getOrderNumber() + DELIMITER;

@@ -23,7 +23,7 @@ public interface FlooringServiceLayer {
             OrderDaoPersistenceException, OrderDaoDataValidationException;
 
 
-    Order editOrder(String date, int orderNo) throws
+    Order editOrder(String date, int orderNo, Order edittedOrder) throws
             OrderDaoPersistenceException, OrderDaoDataValidationException;
 
     void addOrder(String date, Order order) throws OrderDaoDuplicateIdException,

@@ -14,29 +14,35 @@ public class OrderDaoFileImpl implements OrderDao {
 
 
 
-
+    //comma delineation
     public static final String DELIMITER = ",";
 
-
+    //hashmap with orderno as key to store order objects
     private Map<Integer, Order> orders = new HashMap<>();
 
 
 
     @Override
     public Order addOrder(String stringDateFileName, int orderNo, Order order) throws OrderDaoPersistenceException {
+        //call load orders
         loadOrders(stringDateFileName);
+        //put in map
         Order prevOrder = orders.put(orderNo, order);
+        //write new order
         writeOrders(stringDateFileName);
         return prevOrder;
     }
 
     @Override
     public List<Order> getAllOrders(String stringDateFileName) throws OrderDaoPersistenceException  {
+        //simply load and turn values
         loadOrders(stringDateFileName);
         return  new ArrayList<>(orders.values());
     }
 
+    //helper method to getOrder such as for delete and edit
     public Order getOrder(String stringDateFileName, int orderNo) throws OrderDaoPersistenceException {
+
         loadOrders(stringDateFileName);
         return orders.get(orderNo);
     }
@@ -44,6 +50,7 @@ public class OrderDaoFileImpl implements OrderDao {
     @Override
     public Order removeOrder(String stringDateFileName, int orderNo) throws OrderDaoPersistenceException{
         loadOrders(stringDateFileName);
+        //simple remove
         Order removedOrder = orders.remove(orderNo);
         writeOrders(stringDateFileName);
         return removedOrder;
@@ -52,6 +59,7 @@ public class OrderDaoFileImpl implements OrderDao {
     @Override
     public Order editOrder(String stringDateFileName, int orderNo, Order editedOrder) throws OrderDaoPersistenceException {
         loadOrders(stringDateFileName);
+        //use put to replace/ edit old order
         Order removedOrder = orders.put(orderNo, editedOrder);
         writeOrders(stringDateFileName);
         return removedOrder;
@@ -60,12 +68,16 @@ public class OrderDaoFileImpl implements OrderDao {
 
     private Order unmarshallOrder(String orderAsText) {
 
+        //delimiter is grabbed to split, being comma
         String[] orderTokens = orderAsText.split(DELIMITER);
 
+        //create order object with orderNo
         int orderNo = Integer.parseInt(orderTokens[0]);
-
+        //
         Order orderFromFile = new Order(orderNo);
 
+        //values are set according to order in order object with customer name first
+        //setter methods have validation
         orderFromFile.setCustomerName(orderTokens[1]);
         orderFromFile.setState(orderTokens[2]);
 
@@ -113,17 +125,17 @@ public class OrderDaoFileImpl implements OrderDao {
         String currentLine;
         // currentStudent holds the most recent student unmarshalled
         Order currentOrder;
-        // Go through ROSTER_FILE line by line, decoding each line into a
-        // Student object by calling the unmarshallStudent method.
+        // Go through file line by line, decoding each line into a
+        // Student object by calling the unmarshallmethod.
         // Process while we have more lines in the file
         while (scanner.hasNextLine()) {
             // get the next line in the file
             currentLine = scanner.nextLine();
-            // unmarshall the line into a Student
+            // unmarshall the line into an Order
             currentOrder = unmarshallOrder(currentLine);
 
-            // We are going to use the student id as the map key for our student object.
-            // Put currentStudent into the map using student id as the key
+            // We are going to use the orderno as the map key for our order object.
+            // Put current Order into the map using orderNo as the key
             orders.put(currentOrder.getOrderNumber(), currentOrder);
         }
         // close scanner
@@ -132,6 +144,7 @@ public class OrderDaoFileImpl implements OrderDao {
 
     private String marshallOrder(Order order) {
 
+        // get values and add to string separated by comma in exact order
         String orderAsText = order.getOrderNumber() + DELIMITER;
 
         orderAsText += order.getCustomerName() + DELIMITER;
@@ -209,11 +222,13 @@ public class OrderDaoFileImpl implements OrderDao {
         return allOrders;
     }
 
+    //helper method to get date from a filename
     public String getDateFromFilename(String fileName) throws OrderDaoPersistenceException {
         String rawDate = fileName.replace("Orders_", "").replace(".txt", ""); // "06012026"
         return rawDate.substring(0, 2) + "/" + rawDate.substring(2, 4) + "/" + rawDate.substring(4); // "06/01/2026"
     }
 
+    //helper method for export all method
     public List<Order> getAllOrdersAllDates(String directory) throws OrderDaoPersistenceException {
         File ordersDir = new File(directory);
         File[] orderFiles = ordersDir.listFiles((dir, name) -> name.endsWith(".txt"));
