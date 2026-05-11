@@ -65,7 +65,20 @@ public class FlooringView {
     }
 
     public BigDecimal getArea() {
-        return new BigDecimal(io.readString("Please enter Area"));
+
+        while (true) {
+
+            String input = io.readString("Please enter Area");
+
+            try {
+
+                return new BigDecimal(input);
+
+            } catch (NumberFormatException e) {
+
+                io.print("ERROR: Please enter a valid decimal number.");
+            }
+        }
     }
 
 
